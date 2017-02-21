@@ -5,6 +5,27 @@
         <title></title>
     </head>
     <body>
-        {{result}}
+        <form class="" action="/additem" method="post">
+            <label for="item">item</label>
+            <input type="text" name="item" value="">
+            <label for="description">description</label>
+            <input type="text" name="description" value="">
+            <button type="submit" name="button">send</button>
+        </form>
+        <ul>{%for current_item in result%}
+            <li>{{current_item.item}}, {{current_item.description}}</li>
+            {%endfor%}</ul>
+                <p><a href="/clearlist">Clear List</a> <a href="/">Go Home</a></p>
+            <form class="" action="/search" method="post">
+                <label for="search_term">Search:</label>
+                <input type="text" name="search_term" value="">
+                <button type="submit" name="button">Search</button>
+            </form>
+            <form class="" action="/change" method="post">
+                <label for="search_term">Change List Item Name:</label>
+                <input type="text" name="old_name" value="" placeholder="List name">
+                <input type="text" name="new_name" value="" placeholder="New list name">
+                <button type="submit" name="button">Search</button>
+            </form>
     </body>
 </html>
