@@ -2,6 +2,7 @@
     date_default_timezone_set("America/Los_Angeles");
     require_once __DIR__."/../vendor/autoload.php";
     require_once __DIR__."/../src/src.php";
+    require_once __DIR__."/../src/user.php";
 
     $app = new Silex\Application();
     $app->register(new Silex\Provider\TwigServiceProvider(), ["twig.path" => __DIR__."/../views"]);
@@ -12,8 +13,7 @@
     $DB = new PDO($server,$username,$password);
 
     $app->get('/', function() use($app) {
-        $result = Inventory::getAll();
-        return $app["twig"]->render("root.html.twig", ['result' => $result]);
+        return $app["twig"]->render("root.html.twig");
     });
 
     $app->post('/additem', function() use($app) {
@@ -40,6 +40,21 @@
         Inventory::replace($_POST['old_name'], $_POST['new_name']);
         $result = Inventory::getAll();
         return $app['twig']->render('root.html.twig', ['result' => $result]);
+    });
+
+    $app->get('/signin', function() use($app) {
+        return $app["twig"]->render("signin.html.twig");
+    });
+
+    $app->post('/signin', function() use($app) {
+        if(User::signIn($_POST['username'], $_POST['password']))
+        {
+            $result = Inventory::getAll();
+            return $app['twig']->render('root.html.twig', ['result' => $result]);
+        }
+        else {
+            return $app['twig']->render('signin.html.twig');
+        }
     });
 
     return $app;
